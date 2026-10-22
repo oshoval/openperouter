@@ -23,7 +23,7 @@ func TestVhostDevargs(t *testing.T) {
 		assert.True(t, strings.HasPrefix(a, "net_vhost"))
 		assert.Contains(t, a, "iface="+path)
 		assert.Contains(t, a, "queues=1")
-		assert.Contains(t, a, "iommu-support=1")
+		assert.NotContains(t, a, "iommu-support=1")
 		assert.NotContains(t, a, "client=1")
 		b, err := VhostDevargs("vhu-poc", path, 1, false)
 		require.NoError(t, err)
@@ -66,7 +66,7 @@ func TestCreateVhostPort(t *testing.T) {
 				err: fmt.Errorf("error: command failed: No such device (ENODEV)"),
 			},
 			cmdCall{
-				cmd: fmt.Sprintf("grcli --err-exit --json --socket sock interface add port vhu-poc devargs %s rxqs 1 qsize 1024 up", devargs),
+				cmd: fmt.Sprintf("grcli --err-exit --json --socket sock interface add port vhu-poc devargs %s rxqs 1 qsize 4096 up", devargs),
 			},
 			cmdCall{
 				cmd: "grcli --err-exit --json --socket sock interface set port vhu-poc mac 52:54:00:67:72:01",
